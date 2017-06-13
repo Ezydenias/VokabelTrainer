@@ -1,0 +1,4 @@
+Television	television
+Radio	radio
+Video	video
+Computer	computer
