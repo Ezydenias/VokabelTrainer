@@ -1,0 +1,39 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Ezydenias
+ * Date: 6/13/2017
+ * Time: 20:32
+ */
+
+/** @var \Ezydenias\Vokabeltrainer\Lesson $lesson */
+/** @var mixed[] $question */
+/** @var int $step */
+/** @var string $lessonName */
+/** @var string $action */
+/** @var bool $reverse */
+
+$reverseAction = $action . (!$reverse ? '/reverse' : '');
+$action = $action . ($reverse ? '/reverse' : '');
+
+?><!doctype html>
+<html>
+<head>
+    <title>Vokabelübung &gt; <?php echo $lessonName; ?></title>
+</head>
+<body>
+<h1><?php echo $question['question']; ?></h1>
+<a href="<?php echo $reverseAction; ?>">Drehen</a>
+<form action="<?php echo $action; ?>" method="post" autocomplete="off">
+    <input type="hidden" name="available" value="<?php echo implode('|', $question['answers']); ?>">
+    <?php foreach ($question['answers'] as $i => $answer): ?>
+        <label for="answer<?php echo $i; ?>">
+            <input id="answer<?php echo $i; ?>" name="answer" type="radio" value="<?php echo $answer; ?>"/>
+            <?php echo $answer; ?>
+        </label>
+    <?php endforeach; ?>
+    <button type="submit" name="check" value="1">Prüfen</button>
+</form>
+
+</body>
+</html>

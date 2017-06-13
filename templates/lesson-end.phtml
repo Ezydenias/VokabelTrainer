@@ -1,0 +1,23 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Ezydenias
+ * Date: 6/13/2017
+ * Time: 20:32
+ */
+
+/** @var \Ezydenias\Vokabeltrainer\Lesson $lesson */
+/** @var int $step */
+/** @var string $lessonName */
+/** @var string $next */
+
+?><!doctype html>
+<html>
+<head>
+    <title>Vokabelübung &gt; <?php echo $lessonName; ?></title>
+</head>
+<body>
+<p><?php echo $lesson->getScore(); ?></p>
+<a href="<?php echo $next; ?>">Menü</a>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Ezydenias
+ * Date: 6/13/2017
+ * Time: 20:32
+ */
+
+/** @var \Ezydenias\Vokabeltrainer\Lesson $lesson */
+/** @var mixed[] $question */
+/** @var int $step */
+/** @var string $lessonName */
+/** @var string $next */
+/** @var string $givenAnswer */
+/** @var bool $isCorrect */
+/** @var bool $reverse */
+
+$next = $next . ($reverse ? '/reverse' : '');
+
+?><!doctype html>
+<html>
+<head>
+    <title>Vokabelübung &gt; <?php echo $lessonName; ?></title>
+</head>
+<body>
+<h1><?php echo $question['question']; ?></h1>
+<?php foreach ($question['answers'] as $i => $answer): ?>
+    <div
+        <?php if ($answer === $givenAnswer): ?>style="color: <?php echo $isCorrect ? 'green' : 'red'; ?>"<?php endif; ?>>
+        <?php echo $answer; ?>
+    </div>
+<?php endforeach; ?>
+<a href="<?php echo $next; ?>">Weiter</a>
+</body>
+</html>
