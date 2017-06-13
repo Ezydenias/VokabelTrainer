@@ -13,5 +13,8 @@
     "psr-4": {
       "Ezydenias\\Vokabeltrainer\\": "src"
     }
+  },
+  "require": {
+    "silex/silex": "v2.0.4"
   }
 }
