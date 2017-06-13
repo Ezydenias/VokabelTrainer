@@ -1,0 +1,17 @@
+{
+  "name": "ezydenias/vokabeltrainer",
+  "description": "Ein Vokabeltrainer",
+  "minimum-stability": "dev",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Maximilian Kleiner",
+      "email": "kleinermaximilian@googlemail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Ezydenias\\Vokabeltrainer\\": "src"
+    }
+  }
+}
