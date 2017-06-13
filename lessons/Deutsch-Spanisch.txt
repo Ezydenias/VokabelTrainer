@@ -1,0 +1,4 @@
+﻿Television	televisión
+Radio	radio
+Video	vídeo
+Auto	coche
