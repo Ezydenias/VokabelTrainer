@@ -35,14 +35,17 @@ $next = $next . ($reverse ? '/reverse' : '');
         <hr>
     </div>
 
-    <?php foreach ($question['answers'] as $i => $answer): ?>
-        <div
-            <?php if ($answer === $givenAnswer): ?> class="alert alert-<?php echo $isCorrect ? 'success' : 'danger'; ?>"
-                role="alert" <?php else: ?>class="well"<?php endif; ?>>
-            <?php echo $answer; ?>
-        </div>
-    <?php endforeach; ?>
-    <a href="<?php echo $next; ?>" class="btn btn-info" role="button">Weiter</a>
+    <div class="panel-body">
+        <?php foreach ($question['answers'] as $i => $answer): ?>
+            <div
+                <?php if ($answer === $givenAnswer): ?> class="alert alert-<?php echo $isCorrect ? 'success' : 'danger'; ?>"
+                    role="alert" <?php else: ?>class="well well-sm"<?php endif; ?>>
+                <strong><?php echo $answer; ?></strong>
+            </div>
+        <?php endforeach; ?>
+        <a href="<?php echo $next; ?>" class="btn btn-info" role="button">Weiter</a>
+    </div>
+
 </div>
 </body>
 </html>
