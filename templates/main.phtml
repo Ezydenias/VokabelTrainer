@@ -8,35 +8,18 @@
 
 /** @var string $lessons */
 
-?><!doctype html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>VokabelTrainer</title>
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
-    <script src="//code.jquery.com/jquery-2.2.4.min.js"></script>
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-</head>
-<body>
+$title = 'VokabelTrainer';
 
-<div class="panel panel-success">
-    <div class="panel-heading">
-        <h1>VokabelTrainer</h1>
-        <hr>
-    </div>
+require __DIR__ . '/includes/head.phtml';
 
+?>
 
-    <div class="panel-body">
+    <div class="container">
         <?php foreach ($lessons as $item): ?>
             <a href="<?php echo "/$item/0" ?>" class="btn-block btn-lg btn btn-info text-uppercase"
                role="button"><?php echo $item ?></a>
         <?php endforeach; ?>
         <br/>
-        <a href="/report" class="btn btn-info" role="button">Auswertung</a>
     </div>
 
-</div>
-</body>
-</html>
+<?php require __DIR__ . '/includes/foot.phtml'; ?>
