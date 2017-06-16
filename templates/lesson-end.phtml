@@ -23,10 +23,18 @@
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 </head>
 <body>
-<div class="panel panel-primary">
+<div class="panel panel-success">
     <div class="panel-heading">
-        <div class="alert alert-success" role="alert"><p><?php echo $lesson->getScore(); ?></p></div>
-        <!-- <a href="<?php echo $next; ?>" class="btn btn-info" role="" button">Menü</a>-->
+        <div class="progress">
+            <div
+                    class="progress-bar progress-bar-success" role="progressbar"
+                    aria-valuenow="<?php echo $lesson->getScore(); ?>"
+                    aria-valuemin="0"
+                    aria-valuemax="<?php echo $lesson->getLength(); ?>"
+                    style="width: <?php echo $lesson->getScore() / $lesson->getLength() * 100; ?>%;">
+                <p><?php echo $lesson->getScore(); ?> von <?php echo $lesson->getLength(); ?></p>
+            </div>
+        </div>
         <a href="/" class="btn btn-info" role="button">Menü</a>
     </div>
 </body>

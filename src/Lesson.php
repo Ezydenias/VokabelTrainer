@@ -13,38 +13,28 @@ class Lesson
 {
     private $vocabulary = [];
     private $score = 0;
+    private $length = 0;
     private $scoreFilename = '';
+    private $lessonFilename = '';
+    private $loaded = false;
+    private $name = '';
 
     public function __construct($lessonDir, $scoreDir, $lessonName)
     {
+        $this->name = $lessonName;
         $this->scoreFilename = $scoreDir . '/' . $lessonName . '.txt';
         if (file_exists($this->scoreFilename)) {
-            $this->score = intval(file_get_contents($this->scoreFilename, 10));
+            $scoreContent = file_get_contents($this->scoreFilename);
+            $scoreContent = explode('/', $scoreContent, 2);
+            $this->score = intval($scoreContent[0], 10);
+            $this->length = intval($scoreContent[1], 10);
         }
-        $lessonFilename = $lessonDir . '/' . $lessonName . '.txt';
-        if (!file_exists($lessonFilename)) {
-            throw new \Exception('lesson not found');
-        }
-        $lessonFile = file_get_contents($lessonFilename);
-        $lessonFile = explode("\n", $lessonFile);
-        foreach ($lessonFile as $item) {
-            $item = trim($item);
-            if ($item) {
-                $item = explode("\t", $item, 2);
-                if (!isset($item[1])) {
-                    continue;
-                }
-                $this->vocabulary[] = [
-                    'language_1' => $item[0],
-                    'language_2' => $item[1],
-                ];
-            }
-        }
+        $this->lessonFilename = $lessonDir . '/' . $lessonName . '.txt';
     }
 
     public function __destruct()
     {
-        file_put_contents($this->scoreFilename, $this->score);
+        file_put_contents($this->scoreFilename, $this->score . '/' . $this->length);
     }
 
     /**
@@ -93,7 +83,34 @@ class Lesson
 
     public function hasStep($step)
     {
+        $this->loadLesson();
         return isset($this->vocabulary[$step]);
+    }
+
+    private function loadLesson()
+    {
+        if (!$this->loaded) {
+            if (!file_exists($this->lessonFilename)) {
+                throw new \Exception('lesson not found');
+            }
+            $lessonFile = file_get_contents($this->lessonFilename);
+            $lessonFile = explode("\n", $lessonFile);
+            foreach ($lessonFile as $item) {
+                $item = trim($item);
+                if ($item) {
+                    $item = explode("\t", $item, 2);
+                    if (!isset($item[1])) {
+                        continue;
+                    }
+                    $this->vocabulary[] = [
+                        'language_1' => $item[0],
+                        'language_2' => $item[1],
+                    ];
+                }
+            }
+            $this->length = count($this->vocabulary);
+            $this->loaded = true;
+        }
     }
 
     public function checkAnswer($step, $answer, $reverse = false)
@@ -106,8 +123,24 @@ class Lesson
         return $answer === $step[$answerKey];
     }
 
+    /**
+     * @return int
+     */
+    public function getLength()
+    {
+        return $this->length;
+    }
+
     public function incrementScore()
     {
         $this->score++;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

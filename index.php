@@ -82,13 +82,22 @@ $app->post('/{lessonName}/{step}/{reverse}', function (\Symfony\Component\HttpFo
 })
     ->value('reverse', false);
 
-$app->get('/', function () {
-    $mainPage = new \Ezydenias\Vokabeltrainer\LessonList(LESSON_DIRECTORY);
-    $lessons = $mainPage->getLessons();
+$app->get('/report', function () {
+    $lessons = new \Ezydenias\Vokabeltrainer\LessonList(LESSON_DIRECTORY);
     $vars = [
-        'lessons' => $lessons,
+        'lessons' => array_map(function ($lesson) {
+            return new \Ezydenias\Vokabeltrainer\Lesson(LESSON_DIRECTORY, SCORE_DIRECTORY, $lesson);
+        }, $lessons->getLessons()),
     ];
-    return new \Symfony\Component\HttpFoundation\Response(render('main-lesson-chose.phtml', $vars));
+    return new \Symfony\Component\HttpFoundation\Response(render('report.phtml', $vars));
+});
+
+$app->get('/', function () {
+    $lessons = new \Ezydenias\Vokabeltrainer\LessonList(LESSON_DIRECTORY);
+    $vars = [
+        'lessons' => $lessons->getLessons(),
+    ];
+    return new \Symfony\Component\HttpFoundation\Response(render('main.phtml', $vars));
 });
 
 $app->run();
