@@ -82,8 +82,13 @@ $app->post('/{lessonName}/{step}/{reverse}', function (\Symfony\Component\HttpFo
 })
     ->value('reverse', false);
 
-$app->get('/', function (\Symfony\Component\HttpFoundation\Request $request) {
-    return new \Symfony\Component\HttpFoundation\Response('Test');
+$app->get('/', function () {
+    $mainPage = new \Ezydenias\Vokabeltrainer\LessonList(LESSON_DIRECTORY);
+    $lessons = $mainPage->getLessons();
+    $vars = [
+        'lessons' => $lessons,
+    ];
+    return new \Symfony\Component\HttpFoundation\Response(render('main-lesson-chose.phtml', $vars));
 });
 
 $app->run();
