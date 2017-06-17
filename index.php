@@ -92,6 +92,39 @@ $app->get('/report', function () {
     return new \Symfony\Component\HttpFoundation\Response(render('report.phtml', $vars));
 });
 
+$app->get('/upload', function () {
+    return new \Symfony\Component\HttpFoundation\Response(render('upload.phtml', [
+        'filename' => false,
+        'error' => false,
+    ]));
+});
+
+$app->post('/upload', function (\Symfony\Component\HttpFoundation\Request $request) {
+    $error = false;
+    /** @var \Symfony\Component\HttpFoundation\File\UploadedFile $file */
+    $file = $request->files->get('lesson-file');
+    $filename = strip_tags($file->getClientOriginalName());
+    $filename = str_replace(['/', '\\', "\t", "\n", '<', '>', ':', '*', ':', '"', '|'], ' ', $filename);
+    $file->move(LESSON_DIRECTORY, $filename);
+    try {
+        $lesson = new \Ezydenias\Vokabeltrainer\Lesson(LESSON_DIRECTORY, SCORE_DIRECTORY, basename($filename, '.txt'));
+        $lesson->loadLesson();
+    } catch (Exception $e) {
+        unset($lesson);
+        $error = $e->getMessage();
+        if (file_exists(LESSON_DIRECTORY . '/' . $filename)) {
+            unlink(LESSON_DIRECTORY . '/' . $filename);
+        }
+        if (file_exists(SCORE_DIRECTORY . '/' . $filename)) {
+            unlink(SCORE_DIRECTORY . '/' . $filename);
+        }
+    }
+    return new \Symfony\Component\HttpFoundation\Response(render('upload.phtml', [
+        'filename' => $filename,
+        'error' => $error,
+    ]));
+});
+
 $app->get('/', function () {
     $lessons = new \Ezydenias\Vokabeltrainer\LessonList(LESSON_DIRECTORY);
     $vars = [

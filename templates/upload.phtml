@@ -1,0 +1,47 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Ezydenias
+ * Date: 6/17/2017
+ * Time: 12:29
+ */
+
+/** @var string $filename */
+/** @var string|bool $error */
+
+$title = 'VokabelTrainer &gt; Upload';
+
+require __DIR__ . '/includes/head.phtml';
+
+?>
+
+    <script type="application/javascript">
+        $(function () {
+            $('#lesson-file').on('change', function (evt) {
+                $('#lesson-file-label span').text(evt.target.value);
+            });
+        });
+    </script>
+
+    <div class="container">
+        <?php if ($error): ?>
+            <div class="alert alert-danger">
+                Es ist ein Fehler aufgetreten: <?php echo $error; ?>
+            </div>
+        <?php elseif ($filename): ?>
+            <div class="alert alert-success">
+                Übung als <?php echo $filename; ?> hochgeladen.
+            </div>
+        <?php endif; ?>
+        <form action="/upload" enctype="multipart/form-data" method="post" autocomplete="off">
+            <div class="btn-group" role="group">
+                <label class="btn btn-default" for="lesson-file" id="lesson-file-label">
+                    <span>Durchsuchen</span> <input id="lesson-file" name="lesson-file" type="file" accept="text/plain"
+                                                    style="display: none;">
+                </label>
+                <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-upload"></span></button>
+            </div>
+        </form>
+    </div>
+
+<?php require __DIR__ . '/includes/foot.phtml'; ?>

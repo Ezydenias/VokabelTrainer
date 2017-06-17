@@ -87,7 +87,7 @@ class Lesson
         return isset($this->vocabulary[$step]);
     }
 
-    private function loadLesson()
+    public function loadLesson()
     {
         if (!$this->loaded) {
             if (!file_exists($this->lessonFilename)) {
@@ -110,6 +110,9 @@ class Lesson
             }
             $this->length = count($this->vocabulary);
             $this->loaded = true;
+            if (!$this->length) {
+                throw new \Exception('lesson is invalid');
+            }
         }
     }
 
