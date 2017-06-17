@@ -6,12 +6,22 @@
  * Time: 19:06
  */
 
-const LESSON_DIRECTORY = __DIR__ . '/lessons';
-const SCORE_DIRECTORY = __DIR__ . '/scores';
-const TEMPLATE_DIRECTORY = __DIR__ . '/templates';
-const SERVER_PREFIX = '';
+/**
+ * Constants for settings.
+ */
+const LESSON_DIRECTORY = __DIR__ . '/lessons';      // Directory with lesson files (must be writable)
+const SCORE_DIRECTORY = __DIR__ . '/scores';        // Directory with score files (must be writable)
+const TEMPLATE_DIRECTORY = __DIR__ . '/templates';  // Directory with templates
+const SERVER_PREFIX = '';                           // Prefix for urls
+
 require_once __DIR__ . '/vendor/autoload.php';
 
+/**
+ * Load a template and render it into a buffer.
+ * @param string $templateName
+ * @param mixed[] $variables
+ * @return string
+ */
 function render($templateName, $variables)
 {
     extract($variables);
@@ -22,8 +32,14 @@ function render($templateName, $variables)
     return $content;
 }
 
+/**
+ * Create the server app.
+ */
 $app = new \Silex\Application();
 
+/**
+ * Handler for the last step in a lesson.
+ */
 $app->get('/{lessonName}/finish', function ($lessonName) {
     $lesson = new \Ezydenias\Vokabeltrainer\Lesson(LESSON_DIRECTORY, SCORE_DIRECTORY, $lessonName);
     $vars = [
@@ -34,8 +50,12 @@ $app->get('/{lessonName}/finish', function ($lessonName) {
     return new \Symfony\Component\HttpFoundation\Response(render('lesson-end.phtml', $vars));
 });
 
+/**
+ * Handler for a single lesson step (before selection).
+ */
 $app->get('/{lessonName}/{step}/{reverse}', function ($lessonName, $step, $reverse) {
     $lesson = new \Ezydenias\Vokabeltrainer\Lesson(LESSON_DIRECTORY, SCORE_DIRECTORY, $lessonName);
+    // Very first step? Let's reset the score.
     if ($step == 0) {
         $lesson->setScore(0);
     }
@@ -52,18 +72,27 @@ $app->get('/{lessonName}/{step}/{reverse}', function ($lessonName, $step, $rever
 })
     ->value('reverse', false);
 
+/**
+ * Handler for a single lesson step (after selection).
+ */
 $app->post('/{lessonName}/{step}/{reverse}', function (\Symfony\Component\HttpFoundation\Request $request, $lessonName, $step, $reverse) {
     $lesson = new \Ezydenias\Vokabeltrainer\Lesson(LESSON_DIRECTORY, SCORE_DIRECTORY, $lessonName);
-    $availableAnswers = explode('|', $request->get('available'));
     $givenAnswer = $request->get('answer');
+
+    // Check answer and increment score
     $answerIsCorrect = $lesson->checkAnswer($step, $givenAnswer, $reverse);
     if ($answerIsCorrect) {
         $lesson->incrementScore();
     }
+
     $question = $lesson->getStep($step, $reverse);
+    // We override the answers, because we'll otherwise tend to get a different set of answers, with only the
+    // correct answer garantueed to be included
+    $availableAnswers = explode('|', $request->get('available'));
     $question['answers'] = $availableAnswers;
 
     $next = $step + 1;
+    // No next step? Go to finish.
     if (!$lesson->hasStep($next)) {
         $next = 'finish';
         $reverse = false;
@@ -83,6 +112,9 @@ $app->post('/{lessonName}/{step}/{reverse}', function (\Symfony\Component\HttpFo
 })
     ->value('reverse', false);
 
+/*
+ * Handler for the report function.
+ */
 $app->get('/report', function () {
     $lessons = new \Ezydenias\Vokabeltrainer\LessonList(LESSON_DIRECTORY);
     $vars = [
@@ -93,6 +125,9 @@ $app->get('/report', function () {
     return new \Symfony\Component\HttpFoundation\Response(render('report.phtml', $vars));
 });
 
+/**
+ * Handler for the upload function (before file is send).
+ */
 $app->get('/upload', function () {
     return new \Symfony\Component\HttpFoundation\Response(render('upload.phtml', [
         'filename' => false,
@@ -100,13 +135,25 @@ $app->get('/upload', function () {
     ]));
 });
 
+/**
+ * Handler for the upload function (after file is send).
+ */
 $app->post('/upload', function (\Symfony\Component\HttpFoundation\Request $request) {
     $error = false;
     /** @var \Symfony\Component\HttpFoundation\File\UploadedFile $file */
     $file = $request->files->get('lesson-file');
+
+    // Clean filename
     $filename = strip_tags($file->getClientOriginalName());
     $filename = str_replace(['/', '\\', "\t", "\n", '<', '>', ':', '*', ':', '"', '|'], ' ', $filename);
+
     $file->move(LESSON_DIRECTORY, $filename);
+
+    /**
+     * We try to load the lesson once, so we
+     * a) Get a score file
+     * b) Get an exception if there was some problem with moving the file or bad contents
+     */
     try {
         $lesson = new \Ezydenias\Vokabeltrainer\Lesson(LESSON_DIRECTORY, SCORE_DIRECTORY, basename($filename, '.txt'));
         $lesson->loadLesson();
@@ -120,12 +167,16 @@ $app->post('/upload', function (\Symfony\Component\HttpFoundation\Request $reque
             unlink(SCORE_DIRECTORY . '/' . $filename);
         }
     }
+
     return new \Symfony\Component\HttpFoundation\Response(render('upload.phtml', [
         'filename' => $filename,
         'error' => $error,
     ]));
 });
 
+/**
+ * Handler for the main page.
+ */
 $app->get('/', function () {
     $lessons = new \Ezydenias\Vokabeltrainer\LessonList(LESSON_DIRECTORY);
     $vars = [

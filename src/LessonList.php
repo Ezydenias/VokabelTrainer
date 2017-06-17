@@ -8,12 +8,22 @@
 
 namespace Ezydenias\Vokabeltrainer;
 
-
+/**
+ * Class LessonList
+ * Scans a directory for lessons.
+ * @package Ezydenias\Vokabeltrainer
+ */
 class LessonList
 {
-
+    /**
+     * @var string[]
+     */
     private $lessons = [];
 
+    /**
+     * LessonList constructor.
+     * @param string $lessonDir
+     */
     public function __construct($lessonDir)
     {
         $lessonsList = scandir($lessonDir);
@@ -26,7 +36,8 @@ class LessonList
     }
 
     /**
-     * @return array
+     * Gets the list of lessons.
+     * @return string[]
      */
     public function getLessons()
     {

@@ -8,17 +8,54 @@
 
 namespace Ezydenias\Vokabeltrainer;
 
-
+/**
+ * Class Lesson
+ * Represents a single lesson.
+ * @package Ezydenias\Vokabeltrainer
+ */
 class Lesson
 {
+    /**
+     * @var string[]
+     */
     private $vocabulary = [];
+
+    /**
+     * @var int
+     */
     private $score = 0;
+
+    /**
+     * @var int
+     */
     private $length = 0;
+
+    /**
+     * @var string
+     */
     private $scoreFilename = '';
+
+    /**
+     * @var string
+     */
     private $lessonFilename = '';
+
+    /**
+     * @var bool
+     */
     private $loaded = false;
+
+    /**
+     * @var string
+     */
     private $name = '';
 
+    /**
+     * Lesson constructor.
+     * @param string $lessonDir
+     * @param string $scoreDir
+     * @param string $lessonName
+     */
     public function __construct($lessonDir, $scoreDir, $lessonName)
     {
         $this->name = $lessonName;
@@ -32,12 +69,16 @@ class Lesson
         $this->lessonFilename = $lessonDir . '/' . $lessonName . '.txt';
     }
 
+    /**
+     * Lesson destructor.
+     */
     public function __destruct()
     {
         file_put_contents($this->scoreFilename, $this->score . '/' . $this->length);
     }
 
     /**
+     * Getter for score.
      * @return int
      */
     public function getScore()
@@ -46,6 +87,7 @@ class Lesson
     }
 
     /**
+     * Setter for score.
      * @param int $score
      * @return Lesson
      */
@@ -55,6 +97,13 @@ class Lesson
         return $this;
     }
 
+    /**
+     * Get a specific step (word and answers) of the lesson.
+     * @param int $step
+     * @param bool $reverse
+     * @return array
+     * @throws \Exception
+     */
     public function getStep($step, $reverse = false)
     {
         if (!$this->hasStep($step)) {
@@ -81,12 +130,21 @@ class Lesson
         ];
     }
 
+    /**
+     * Check if lesson has a certain step.
+     * @param int $step
+     * @return bool
+     */
     public function hasStep($step)
     {
         $this->loadLesson();
         return isset($this->vocabulary[$step]);
     }
 
+    /**
+     * Load and parse the content of the lesson file.
+     * @throws \Exception
+     */
     public function loadLesson()
     {
         if (!$this->loaded) {
@@ -116,6 +174,14 @@ class Lesson
         }
     }
 
+    /**
+     * Check if an answer is correct for a given step.
+     * @param int $step
+     * @param string $answer
+     * @param bool $reverse
+     * @return bool
+     * @throws \Exception
+     */
     public function checkAnswer($step, $answer, $reverse = false)
     {
         if (!$this->hasStep($step)) {
@@ -127,6 +193,7 @@ class Lesson
     }
 
     /**
+     * Getter for the lesson length.
      * @return int
      */
     public function getLength()
@@ -134,12 +201,16 @@ class Lesson
         return $this->length;
     }
 
+    /**
+     * Increment the score by one.
+     */
     public function incrementScore()
     {
         $this->score++;
     }
 
     /**
+     * Getter for the lesson name.
      * @return string
      */
     public function getName()
