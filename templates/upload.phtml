@@ -33,7 +33,8 @@ require __DIR__ . '/includes/head.phtml';
                 Übung als <?php echo $filename; ?> hochgeladen.
             </div>
         <?php endif; ?>
-        <form action="/upload" enctype="multipart/form-data" method="post" autocomplete="off">
+        <form action="<?php echo SERVER_PREFIX; ?>/upload" enctype="multipart/form-data" method="post"
+              autocomplete="off">
             <div class="btn-group" role="group">
                 <label class="btn btn-default" for="lesson-file" id="lesson-file-label">
                     <span>Durchsuchen</span> <input id="lesson-file" name="lesson-file" type="file" accept="text/plain"

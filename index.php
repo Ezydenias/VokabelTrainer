@@ -9,6 +9,7 @@
 const LESSON_DIRECTORY = __DIR__ . '/lessons';
 const SCORE_DIRECTORY = __DIR__ . '/scores';
 const TEMPLATE_DIRECTORY = __DIR__ . '/templates';
+const SERVER_PREFIX = '';
 require_once __DIR__ . '/vendor/autoload.php';
 
 function render($templateName, $variables)

@@ -31,7 +31,7 @@ require __DIR__ . '/includes/head.phtml';
                 <strong><?php echo $answer; ?></strong>
             </div>
         <?php endforeach; ?>
-        <a href="<?php echo $next; ?>" class="btn btn-info" role="button">Weiter</a>
+        <a href="<?php echo SERVER_PREFIX . $next; ?>" class="btn btn-info" role="button">Weiter</a>
     </div>
 
 <?php require __DIR__ . '/includes/foot.phtml'; ?>

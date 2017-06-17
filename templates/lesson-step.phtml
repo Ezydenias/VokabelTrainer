@@ -23,7 +23,7 @@ require __DIR__ . '/includes/head.phtml';
 ?>
     <div class="container">
         <h2><?php echo $question['question']; ?></h2>
-        <form action="<?php echo $action; ?>" method="post" autocomplete="off">
+        <form action="<?php echo SERVER_PREFIX . $action; ?>" method="post" autocomplete="off">
             <input type="hidden" name="available" value="<?php echo implode('|', $question['answers']); ?>">
             <?php foreach ($question['answers'] as $i => $answer): ?>
                 <label class="well well-sm center-block" for="answer<?php echo $i; ?>">

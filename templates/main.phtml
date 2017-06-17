@@ -16,7 +16,7 @@ require __DIR__ . '/includes/head.phtml';
 
     <div class="container">
         <?php foreach ($lessons as $item): ?>
-            <a href="<?php echo "/$item/0" ?>" class="btn-block btn-lg btn btn-info text-uppercase"
+            <a href="<?php echo SERVER_PREFIX . "/$item/0" ?>" class="btn-block btn-lg btn btn-info text-uppercase"
                role="button"><?php echo $item ?></a>
         <?php endforeach; ?>
         <br/>
