@@ -1,0 +1,25 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Ezydenias
+ * Date: 6/13/2017
+ * Time: 20:32
+ */
+
+/** @var string $lessons */
+
+$title = 'VokabelTrainer';
+
+require __DIR__ . '/includes/head.phtml';
+
+?>
+
+    <div class="container">
+        <?php foreach ($lessons as $item): ?>
+            <a href="<?php echo SERVER_PREFIX . "/$item/0" ?>" class="btn-block btn-lg btn btn-info text-uppercase"
+               role="button"><?php echo $item ?></a>
+        <?php endforeach; ?>
+        <br/>
+    </div>
+
+<?php require __DIR__ . '/includes/foot.phtml'; ?>

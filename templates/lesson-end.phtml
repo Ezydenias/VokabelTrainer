@@ -11,13 +11,23 @@
 /** @var string $lessonName */
 /** @var string $next */
 
-?><!doctype html>
-<html>
-<head>
-    <title>Vokabelübung &gt; <?php echo $lessonName; ?></title>
-</head>
-<body>
-<p><?php echo $lesson->getScore(); ?></p>
-<a href="<?php echo $next; ?>">Menü</a>
-</body>
-</html>
+
+$title = 'Vokabelübung &gt; ' . $lessonName;
+
+require __DIR__ . '/includes/head.phtml';
+
+?>
+
+    <div class="container">
+    <div class="progress">
+        <div
+                class="progress-bar progress-bar-success" role="progressbar"
+                aria-valuenow="<?php echo $lesson->getScore(); ?>"
+                aria-valuemin="0"
+                aria-valuemax="<?php echo $lesson->getLength(); ?>"
+                style="width: <?php echo $lesson->getScore() / $lesson->getLength() * 100; ?>%;">
+            <p><?php echo $lesson->getScore(); ?> von <?php echo $lesson->getLength(); ?></p>
+        </div>
+    </div>
+
+<?php require __DIR__ . '/includes/foot.phtml'; ?>

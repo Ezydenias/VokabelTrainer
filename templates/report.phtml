@@ -1,0 +1,45 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Ezydenias
+ * Date: 6/13/2017
+ * Time: 20:32
+ */
+
+/** @var \Ezydenias\Vokabeltrainer\Lesson[] $lessons */
+
+$title = 'VokabelTrainer';
+
+require __DIR__ . '/includes/head.phtml';
+
+?>
+
+    <div class="container">
+        <?php foreach ($lessons as $lesson): ?>
+            <div class="center-block well row">
+                <div class="col-sm-4"><?php echo $lesson->getName(); ?></div>
+                <div class="col-sm-8">
+                    <div class="progress">
+                        <div
+                                class="progress-bar progress-bar-success" role="progressbar"
+                                aria-valuenow="<?php echo $lesson->getScore(); ?>"
+                                aria-valuemin="0"
+                                aria-valuemax="<?php echo $lesson->getLength(); ?>"
+                                style="width: <?php echo $lesson->getScore() / $lesson->getLength() * 100; ?>%;">
+                            <div><?php echo $lesson->getScore(); ?></div>
+                        </div>
+                        <div
+                                class="progress-bar progress-bar-danger" role="progressbar"
+                                aria-valuenow="<?php echo $lesson->getScore(); ?>"
+                                aria-valuemin="0"
+                                aria-valuemax="<?php echo $lesson->getLength(); ?>"
+                                style="width: <?php echo ($lesson->getLength() - $lesson->getScore()) / $lesson->getLength() * 100; ?>%;">
+                            <div><?php echo $lesson->getLength() - $lesson->getScore(); ?></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+
+<?php require __DIR__ . '/includes/foot.phtml'; ?>

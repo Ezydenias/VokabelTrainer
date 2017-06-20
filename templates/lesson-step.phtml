@@ -16,24 +16,24 @@
 $reverseAction = $action . (!$reverse ? '/reverse' : '');
 $action = $action . ($reverse ? '/reverse' : '');
 
-?><!doctype html>
-<html>
-<head>
-    <title>Vokabelübung &gt; <?php echo $lessonName; ?></title>
-</head>
-<body>
-<h1><?php echo $question['question']; ?></h1>
-<a href="<?php echo $reverseAction; ?>">Drehen</a>
-<form action="<?php echo $action; ?>" method="post" autocomplete="off">
-    <input type="hidden" name="available" value="<?php echo implode('|', $question['answers']); ?>">
-    <?php foreach ($question['answers'] as $i => $answer): ?>
-        <label for="answer<?php echo $i; ?>">
-            <input id="answer<?php echo $i; ?>" name="answer" type="radio" value="<?php echo $answer; ?>"/>
-            <?php echo $answer; ?>
-        </label>
-    <?php endforeach; ?>
-    <button type="submit" name="check" value="1">Prüfen</button>
-</form>
+$title = 'Vokabelübung &gt; ' . $lessonName;
 
-</body>
-</html>
+require __DIR__ . '/includes/head.phtml';
+
+?>
+    <div class="container">
+        <h2><?php echo $question['question']; ?></h2>
+        <form action="<?php echo SERVER_PREFIX . $action; ?>" method="post" autocomplete="off">
+            <input type="hidden" name="available" value="<?php echo implode('|', $question['answers']); ?>">
+            <?php foreach ($question['answers'] as $i => $answer): ?>
+                <label class="well well-sm center-block" for="answer<?php echo $i; ?>">
+                    <input id="answer<?php echo $i; ?>" name="answer" type="radio" value="<?php echo $answer; ?>"/>
+                    <?php echo $answer; ?>
+                </label>
+            <?php endforeach; ?>
+            <button class="btn btn-info" name="check" value="1">Prüfen</button>
+            <a href="<?php echo $reverseAction; ?>" class="pull-right btn btn-default">Drehen</a>
+        </form>
+    </div>
+
+<?php require __DIR__ . '/includes/foot.phtml'; ?>

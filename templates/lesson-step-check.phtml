@@ -17,19 +17,21 @@
 
 $next = $next . ($reverse ? '/reverse' : '');
 
-?><!doctype html>
-<html>
-<head>
-    <title>Vokabelübung &gt; <?php echo $lessonName; ?></title>
-</head>
-<body>
-<h1><?php echo $question['question']; ?></h1>
-<?php foreach ($question['answers'] as $i => $answer): ?>
-    <div
-        <?php if ($answer === $givenAnswer): ?>style="color: <?php echo $isCorrect ? 'green' : 'red'; ?>"<?php endif; ?>>
-        <?php echo $answer; ?>
+$title = 'Vokabelübung &gt; ' . $lessonName;
+
+require __DIR__ . '/includes/head.phtml';
+
+?>
+    <div class="container">
+        <h2><?php echo $question['question']; ?></h2>
+        <?php foreach ($question['answers'] as $i => $answer): ?>
+            <div
+                <?php if ($answer === $givenAnswer): ?> class="alert alert-<?php echo $isCorrect ? 'success' : 'danger'; ?>"
+                    role="alert" <?php else: ?>class="well well-sm"<?php endif; ?>>
+                <strong><?php echo $answer; ?></strong>
+            </div>
+        <?php endforeach; ?>
+        <a href="<?php echo SERVER_PREFIX . $next; ?>" class="btn btn-info" role="button">Weiter</a>
     </div>
-<?php endforeach; ?>
-<a href="<?php echo $next; ?>">Weiter</a>
-</body>
-</html>
+
+<?php require __DIR__ . '/includes/foot.phtml'; ?>
